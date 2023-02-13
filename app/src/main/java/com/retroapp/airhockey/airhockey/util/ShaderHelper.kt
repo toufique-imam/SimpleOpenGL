@@ -9,6 +9,7 @@ import java.nio.IntBuffer
 class ShaderHelper {
     companion object {
         private const val TAG = "ShaderHelper"
+        const val bytesPerFloat = 4
 
         fun compileVertexShader(shaderCode: String): Int {
             return compileShader(GL_VERTEX_SHADER, shaderCode)
@@ -79,7 +80,7 @@ class ShaderHelper {
             return validateStatus[0] != 0
         }
         fun toFloatBuffer(array: FloatArray): FloatBuffer {
-            val buffer = ByteBuffer.allocateDirect(array.size * 4)
+            val buffer = ByteBuffer.allocateDirect(array.size * bytesPerFloat)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer().apply {
                     put(array)
@@ -88,7 +89,7 @@ class ShaderHelper {
             return buffer
         }
         fun toIntBuffer(array: IntArray): IntBuffer {
-            val buffer = ByteBuffer.allocateDirect(array.size * 4)
+            val buffer = ByteBuffer.allocateDirect(array.size * bytesPerFloat)
                 .order(ByteOrder.nativeOrder())
                 .asIntBuffer().apply {
                     put(array)

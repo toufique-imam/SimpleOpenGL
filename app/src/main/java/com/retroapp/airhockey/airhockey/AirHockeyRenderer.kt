@@ -6,46 +6,41 @@ import android.opengl.GLSurfaceView
 import com.retroapp.airhockey.R
 import com.retroapp.airhockey.airhockey.util.ShaderHelper
 import com.retroapp.airhockey.airhockey.util.TextResourceReader
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 
 class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
     private val positionComponentCount = 2
-    private val uColor = "u_Color"
     private val aPosition = "a_Position"
     private var aPositionLocation: Int = 0
-    private var uColorLocation: Int = 0
-    private var tableVertices = floatArrayOf(
-        //triangle 1
-        -0.5f, -0.5f,
-        0.5f, 0.5f,
-        -0.5f, 0.5f,
-        // Triangle 2
-        -0.5f, -0.5f,
-        0.5f, -0.5f,
-        0.5f, 0.5f,
+
+    private val colorComponentCount = 3
+    private val aColor = "a_Color"
+    private var aColorLocation = 0
+    private val stride = (positionComponentCount + colorComponentCount) * ShaderHelper.bytesPerFloat
+
+    private val tableVerticesWithTriangles = floatArrayOf(
+        // Order of coordinates: X, Y, R, G, B
+
+        // Triangle Fan
+        0f,    0f,   1f,   1f,   1f,
+        -0.5f, -0.5f, 0.7f, 0.7f, 0.7f,
+        0.5f, -0.5f, 0.7f, 0.7f, 0.7f,
+        0.5f,  0.5f, 0.7f, 0.7f, 0.7f,
+        -0.5f,  0.5f, 0.7f, 0.7f, 0.7f,
+        -0.5f, -0.5f, 0.7f, 0.7f, 0.7f,
+
         // Line 1
-        -0.5f, 0f,
-        0.5f, 0f,
+        -0.5f, 0f, 1f, 0f, 0f,
+        0.5f, 0f, 1f, 0f, 0f,
+
         // Mallets
-        0f, -0.25f,
-        0f, 0.25f,
-        //triangle 3
-        -0.6f, -0.6f,
-        0.6f, 0.6f,
-        -0.6f, 0.6f,
-        // Triangle 4
-        -0.6f, -0.6f,
-        0.6f, -0.6f,
-        0.6f, 0.6f,
+        0f, -0.25f, 0f, 0f, 1f,
+        0f,  0.25f, 1f, 0f, 0f
     )
 
-
-    private val vertexData = ShaderHelper.toFloatBuffer(tableVertices)
+    private val vertexData = ShaderHelper.toFloatBuffer(tableVerticesWithTriangles)
     private var program: Int = 0
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
@@ -64,14 +59,32 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
         ShaderHelper.validateProgram(program)
         glUseProgram(program)
         //Getting the Location of a Uniform
-        uColorLocation = glGetUniformLocation(program, uColor)
+        aColorLocation = glGetAttribLocation(program, aColor)
         //Getting the Location of an Attribute
         aPositionLocation = glGetAttribLocation(program, aPosition)
         //Associating an Array of Vertex Data with an Attribute
         vertexData.position(0)
-        glVertexAttribPointer(aPositionLocation, positionComponentCount, GL_FLOAT,false,0,vertexData)
+        glVertexAttribPointer(
+            aPositionLocation,
+            positionComponentCount,
+            GL_FLOAT,
+            false,
+            stride,
+            vertexData
+        )
         //Enabling the Vertex Array
         glEnableVertexAttribArray(aPositionLocation)
+
+        vertexData.position(positionComponentCount)
+        glVertexAttribPointer(
+            aColorLocation,
+            colorComponentCount,
+            GL_FLOAT,
+            false,
+            stride,
+            vertexData
+        )
+        glEnableVertexAttribArray(aColorLocation)
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -80,22 +93,16 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
 
     override fun onDrawFrame(gl: GL10?) {
         glClear(GL_COLOR_BUFFER_BIT)
-        // Draw the second table as border
-        glUniform4f(uColorLocation, 0.5f, 0.5f, 0.5f, 1.0f)
-        glDrawArrays(GL_TRIANGLES, 10, 6)
         //Drawing the Table
-        glUniform4f(uColorLocation, 1.0f, 1.0f, 1.0f, 1.0f)
-        glDrawArrays(GL_TRIANGLES, 0,6)
-        //Drawing the Dividing Line
-        glUniform4f(uColorLocation, 1.0f , 0.0f, 0.0f, 1.0f)
-        glDrawArrays(GL_LINES,6,2)
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 6)
 
-        // Draw the first mallet blue.
-        glUniform4f(uColorLocation, 0.0f, 0.0f, 1.0f, 1.0f)
+        // Draw the center dividing line.
+        glDrawArrays(GL_LINES, 6, 2)
+
+        // Draw the first mallet.
         glDrawArrays(GL_POINTS, 8, 1)
 
-        // Draw the second mallet red.
-        glUniform4f(uColorLocation, 1.0f, 0.0f, 0.0f, 1.0f)
+        // Draw the second mallet.
         glDrawArrays(GL_POINTS, 9, 1)
     }
 }
