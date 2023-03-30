@@ -9,6 +9,15 @@ import java.io.InputStreamReader
 class TextResourceReader {
     companion object {
         const val TAG = "TextResourceReader"
+        /**
+         * Returns the text from given resource, used to get the string for shader code.
+         *
+         * @param context Context
+         * @param resourceId Int
+         * @return String, Shader code
+         * @throws Resources.NotFoundException
+         * @throws IOException
+         */
         fun readTextFileFromResource(context: Context, resourceId: Int): String{
             val body = StringBuilder()
 
