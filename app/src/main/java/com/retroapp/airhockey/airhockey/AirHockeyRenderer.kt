@@ -99,7 +99,8 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         glViewport(0, 0, width, height)
-        val aspectRatio = width.toFloat() / height.toFloat() // calculate the aspect ratio of the screen
+        val aspectRatio =
+            width.toFloat() / height.toFloat() // calculate the aspect ratio of the screen
         val fieldOfViewDegrees = 45.0f // set the field of view in degrees
         val near = 1.0f // set the near clipping plane distance
         val far = 10.0f // set the far clipping plane distance
@@ -107,6 +108,7 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
         MatrixHelper.perspectiveM(projectionMatrix, fieldOfViewDegrees, aspectRatio, near, far)
         setIdentityM(modelMatrix, 0)
         translateM(modelMatrix, 0, 0f, 0f, -2f)
+        rotateM(modelMatrix, 0, -60f, 1f, 0f, 0f)
 
         val temp = FloatArray(16)
         multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0)
