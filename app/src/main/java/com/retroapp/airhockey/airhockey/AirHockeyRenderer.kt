@@ -101,7 +101,7 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
         glViewport(0, 0, width, height)
         val aspectRatio =
             width.toFloat() / height.toFloat() // calculate the aspect ratio of the screen
-        val fieldOfViewDegrees = 45.0f // set the field of view in degrees
+        val fieldOfViewDegrees = 75.0f // set the field of view in degrees
         val near = 1.0f // set the near clipping plane distance
         val far = 10.0f // set the far clipping plane distance
 //        perspectiveM(projectionMatrix, 0, fieldOfViewDegrees, aspectRatio, near, far)
