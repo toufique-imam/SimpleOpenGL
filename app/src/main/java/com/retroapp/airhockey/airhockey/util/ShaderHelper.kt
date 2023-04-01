@@ -154,5 +154,16 @@ class ShaderHelper {
             val intArray = array.filterIsInstance<Number>().map { it.toInt() }.toIntArray()
             return toIntBuffer(intArray)
         }
+        fun buildProgram(vertexShaderSource: String, fragmentShaderCourse: String): Int {
+
+            val vertexShader = compileVertexShader(vertexShaderSource)
+            val fragmentShader = compileFragmentShader(fragmentShaderCourse)
+
+            val program: Int = linkProgram(vertexShader,fragmentShader)
+
+            validateProgram(program)
+
+            return program
+        }
     }
 }
