@@ -42,12 +42,11 @@ class ShaderHelper {
             val compileStatus = intArrayOf(1)
             glGetShaderiv(shaderObjectId, GL_COMPILE_STATUS, compileStatus, 0)
             LoggerConfig.v(
-                TAG, "Results of compiling source:" + "\n" + shaderCode + "\n:"
-                        + glGetShaderInfoLog(shaderObjectId)
+                TAG, "Results of compiling source:\n $shaderCode >>" + glGetShaderInfoLog(shaderObjectId)
             )
             if (compileStatus[0] == 0) {
                 glDeleteShader(shaderObjectId)
-                LoggerConfig.w(TAG, "Compilation of shader failed")
+                LoggerConfig.e(TAG, "Compilation of shader failed")
                 throw RuntimeException("Compilation error of shader")
             }
             return shaderObjectId
@@ -73,8 +72,7 @@ class ShaderHelper {
             val linkStatus = intArrayOf(1)
             glGetProgramiv(programObjectId, GL_LINK_STATUS, linkStatus, 0)
             LoggerConfig.v(
-                TAG, "\"Results of linking program:\\n\"\n" +
-                        "+ glGetProgramInfoLog(programObjectId)"
+                TAG, "Results of linking program >> " + glGetProgramInfoLog(programObjectId)
             )
             if (linkStatus[0] == 0) {
                 glDeleteProgram(programObjectId)
