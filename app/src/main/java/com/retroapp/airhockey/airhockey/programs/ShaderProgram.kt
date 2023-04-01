@@ -4,7 +4,6 @@ import android.content.Context
 import android.opengl.GLES20
 import com.retroapp.airhockey.airhockey.util.ShaderHelper
 import com.retroapp.airhockey.airhockey.util.TextResourceReader
-import org.w3c.dom.Text
 
 open class ShaderProgram(context: Context, vertexShaderResourceId: Int, fragmentShaderResourceId: Int) {
     // Compile the shaders and link the program.
@@ -17,11 +16,13 @@ open class ShaderProgram(context: Context, vertexShaderResourceId: Int, fragment
     companion object {
         // Uniform constants
         const val uMatrix = "u_Matrix"
-        const val uTextureUnit = "u_TextureUnit"
+        const val uTextureUnit1 = "u_TextureUnit1"
+        const val uTextureUnit2 = "u_TextureUnit2"
+        const val uShaderColor = "u_ShaderColor"
 
         // Attribute constants
         const val aPosition = "a_Position"
-        val aColor = "a_Color"
+        const val aColor = "a_Color"
         const val aTextureCoordinates = "a_TextureCoordinates"
     }
 }
