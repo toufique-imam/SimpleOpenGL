@@ -5,18 +5,18 @@ import com.retroapp.airhockey.airhockey.util.ShaderHelper
 
 class Mallet {
     private val vertexArray = VertexArray(vertexData)
-    fun bindData(textureProgram: ColorShaderProgram) {
+    fun bindData(colorProgram: ColorShaderProgram) {
         vertexArray.setVertexAttribPointer(
             0,
-            textureProgram.getPositionAttributeLocation(),
-            Table.positionComponentCount,
-            Table.stride
+            colorProgram.getPositionAttributeLocation(),
+            positionComponentCount,
+            stride
         )
         vertexArray.setVertexAttribPointer(
-            Table.positionComponentCount,
-            textureProgram.getTextureCoordinatesAttributeLocation(),
-            Table.textureCoordinatesComponentCount,
-            Table.stride
+            positionComponentCount,
+            colorProgram.getTextureCoordinatesAttributeLocation(),
+            colorCoordinatesComponentCount,
+            stride
         )
     }
     fun draw() {
