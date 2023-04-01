@@ -1,6 +1,7 @@
 package com.retroapp.airhockey.airhockey.objects
 
 import android.opengl.GLES20
+import com.retroapp.airhockey.airhockey.programs.ColorShaderProgram
 import com.retroapp.airhockey.airhockey.util.ShaderHelper
 
 class Mallet {
@@ -14,7 +15,7 @@ class Mallet {
         )
         vertexArray.setVertexAttribPointer(
             positionComponentCount,
-            colorProgram.getTextureCoordinatesAttributeLocation(),
+            colorProgram.getColorAttributeLocation(),
             colorCoordinatesComponentCount,
             stride
         )
