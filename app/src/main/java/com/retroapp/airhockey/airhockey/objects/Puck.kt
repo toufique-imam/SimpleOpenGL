@@ -1,14 +1,14 @@
 package com.retroapp.airhockey.airhockey.objects
 
 import com.retroapp.airhockey.airhockey.programs.ColorShaderProgram
+import com.retroapp.airhockey.airhockey.util.geometry.Cylinder
 import com.retroapp.airhockey.airhockey.util.geometry.Point
 
-class Mallet(radius: Float, val height: Float, numOfPointsAroundMallet: Int) {
+class Puck(radius: Float, val height: Float, numPointsAroundPuck: Int) {
     private val generatedData =
-        ObjectBuilder.createMallet(Point(0f, 0f, 0f), radius, height, numOfPointsAroundMallet)
+        ObjectBuilder.createPuck(Cylinder(Point(0f, 0f, 0f), radius, height), numPointsAroundPuck)
     private val vertexArray = VertexArray(generatedData.vertexData)
     private val drawList = generatedData.drawList
-
 
     fun bindData(colorProgram: ColorShaderProgram) {
         vertexArray.setVertexAttribPointer(
