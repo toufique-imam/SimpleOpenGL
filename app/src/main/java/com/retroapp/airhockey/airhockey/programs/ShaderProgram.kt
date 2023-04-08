@@ -16,13 +16,12 @@ open class ShaderProgram(context: Context, vertexShaderResourceId: Int, fragment
     companion object {
         // Uniform constants
         const val uMatrix = "u_Matrix"
-        const val uTextureUnit1 = "u_TextureUnit1"
-        const val uTextureUnit2 = "u_TextureUnit2"
-        const val uShaderColor = "u_ShaderColor"
+        const val uTextureUnit = "u_TextureUnit"
 
         // Attribute constants
         const val aPosition = "a_Position"
         const val aColor = "a_Color"
+        const val uColor = "u_Color"
         const val aTextureCoordinates = "a_TextureCoordinates"
     }
 }

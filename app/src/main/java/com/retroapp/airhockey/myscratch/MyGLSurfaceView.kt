@@ -11,11 +11,11 @@ class MyGLSurfaceView(context: Context) : GLSurfaceView(context) {
     private var previousY: Float = 0f
 
     init {
-        setEGLContextClientVersion(2);
+        setEGLContextClientVersion(2)
 
         renderer = MyGLRenderer()
         //setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        setRenderer(renderer);
+        setRenderer(renderer)
 
         renderMode = RENDERMODE_WHEN_DIRTY
     }
@@ -24,7 +24,7 @@ class MyGLSurfaceView(context: Context) : GLSurfaceView(context) {
         // MotionEvent reports input details from the touch screen
         // and other input controls. In this case, you are only
         // interested in events where the touch position changed.
-        if (event == null) return false;
+        if (event == null) return false
         val x: Float = event.x
         val y: Float = event.y
         when (event.action) {

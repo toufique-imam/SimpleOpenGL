@@ -1,6 +1,7 @@
 package com.retroapp.airhockey.airhockey.util
 
-import kotlin.math.*
+import kotlin.math.PI
+import kotlin.math.tan
 
 class MatrixHelper {
     companion object {
