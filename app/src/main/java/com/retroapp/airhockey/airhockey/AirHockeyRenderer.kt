@@ -30,6 +30,7 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
     private lateinit var textureShaderProgram: TextureShaderProgram
     private lateinit var colorShaderProgram: ColorShaderProgram
     private var texture = 0
+    val viewRotation = FloatArray(4)
 
     override fun onSurfaceCreated(p0: GL10?, p1: EGLConfig?) {
         glClearColor(0f, 0f, 0f, 0f)
@@ -38,7 +39,10 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
         puck = Puck(0.06f, 0.02f, 32)
         textureShaderProgram = TextureShaderProgram(context)
         colorShaderProgram = ColorShaderProgram(context)
-
+        viewRotation[0] = 360f
+        viewRotation[1] = 0f
+        viewRotation[2] = 1f
+        viewRotation[3] = 0f
         texture = TextureHelper.loadTexture(context, R.drawable.air_hockey_surface)
 
     }
@@ -57,10 +61,30 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
         // Multiply the view and projection matrices together.
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
 
+        //this will rotate the whole view
+        rotateM(
+            viewProjectionMatrix,
+            0,
+            viewRotation[0],
+            1f,0f,0f
+        )
+        rotateM(
+            viewProjectionMatrix,
+            0,
+            viewRotation[1],
+            0f,1f,0f
+        )
+        rotateM(
+            viewProjectionMatrix,
+            0,
+            viewRotation[2],
+            0f,0f,1f
+        )
         //Draw the table
         positionTableInScene()
         textureShaderProgram.useProgram()
-        textureShaderProgram.setUniforms(modelViewProjectionMatrix, texture)
+        textureShaderProgram.setColor(1f, 1f, 1f, 1f)
+        textureShaderProgram.setUniforms(modelViewProjectionMatrix, texture, texture)
         table.bindData(textureShaderProgram)
         table.draw()
 

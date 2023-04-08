@@ -2,13 +2,20 @@ package com.retroapp.airhockey.airhockey
 
 import android.content.Context
 import android.opengl.GLSurfaceView
+import android.util.DisplayMetrics
+import android.util.Log
 import android.view.MotionEvent
+import com.retroapp.airhockey.airhockey.util.LoggerConfig
+import kotlin.math.atan2
+import kotlin.math.sqrt
 
 class AirHockeySurfaceView(context: Context) : GLSurfaceView(context) {
     private val renderer: AirHockeyRenderer
     private val touchScaleFactor: Float = 180.0f / 320f
-    private var previousX: Float = 0f
-    private var previousY: Float = 0f
+    private var previousX: Float = 0.0f
+    private var previousY: Float = 0.0f
+    private var rotationAngleX: Float = 0.0f
+    private var rotationAngleY: Float = 0.0f
 
     init {
         setEGLContextClientVersion(2)
@@ -20,36 +27,46 @@ class AirHockeySurfaceView(context: Context) : GLSurfaceView(context) {
         renderMode = RENDERMODE_WHEN_DIRTY
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        // MotionEvent reports input details from the touch screen
-        // and other input controls. In this case, you are only
-        // interested in events where the touch position changed.
-        if (event == null) return false
-        val x: Float = event.x
-        val y: Float = event.y
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        val currentX = event.x
+        val currentY = event.y
         when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                // Record the initial touch coordinates
+                previousX = currentX
+                previousY = currentY
+            }
+            MotionEvent.ACTION_UP -> {
+                // Reset the rotation angle
+                rotationAngleX = 0.0f
+                rotationAngleY = 0.0f
+            }
             MotionEvent.ACTION_MOVE -> {
+                // Calculate the change in touch coordinates
+                val deltaX = currentX - previousX
+                val deltaY = currentY - previousY
 
-                var dx: Float = x - previousX
-                var dy: Float = y - previousY
+                // Update the rotation angles based on touch input
+                rotationAngleX += deltaY // Adjust the sensitivity to your preference
+                rotationAngleY += deltaX // Adjust the sensitivity to your preference
 
-                // reverse direction of rotation above the mid-line
-                if (y > height / 2) {
-                    dx *= -1
-                }
+                // Call a method to apply the rotation to your GL rendering
+                applyRotation(rotationAngleX, rotationAngleY)
 
-                // reverse direction of rotation to left of the mid-line
-                if (x < width / 2) {
-                    dy *= -1
-                }
-
-                //renderer.angle += (dx + dy) * TOUCH_SCALE_FACTOR
-               // requestRender()
+                // Update the previous touch coordinates for the next frame
+                previousX = currentX
+                previousY = currentY
             }
         }
-
-        previousX = x
-        previousY = y
         return true
+    }
+
+    // Method to apply rotation to your GL rendering
+    private fun applyRotation(angleX: Float, angleY: Float) {
+        renderer.viewRotation[0] = angleX
+        renderer.viewRotation[1] = angleY
+        renderer.viewRotation[2] = 0f
+        renderer.viewRotation[3] = 0f
+        requestRender()
     }
 }

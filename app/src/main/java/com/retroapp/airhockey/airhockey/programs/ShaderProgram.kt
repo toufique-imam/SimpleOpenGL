@@ -23,5 +23,8 @@ open class ShaderProgram(context: Context, vertexShaderResourceId: Int, fragment
         const val aColor = "a_Color"
         const val uColor = "u_Color"
         const val aTextureCoordinates = "a_TextureCoordinates"
+        const val uTextureUnit1 = "u_TextureUnit1"
+        const val uTextureUnit2 = "u_TextureUnit2"
+        const val uShaderColor = "u_ShaderColor"
     }
 }

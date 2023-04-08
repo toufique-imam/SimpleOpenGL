@@ -1,7 +1,9 @@
 package com.retroapp.airhockey.airhockey
 
 import android.opengl.GLSurfaceView
+import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatActivity
 
 class AirHockeyActivity : AppCompatActivity() {
