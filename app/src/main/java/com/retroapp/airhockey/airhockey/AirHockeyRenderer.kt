@@ -30,7 +30,7 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
     private lateinit var textureShaderProgram: TextureShaderProgram
     private lateinit var colorShaderProgram: ColorShaderProgram
     private var texture = 0
-    var rotationAngle: Float = 0f
+    private var rotationAngle: Float = 0f
 
     override fun onSurfaceCreated(p0: GL10?, p1: EGLConfig?) {
         glClearColor(0f, 0f, 0f, 0f)

@@ -2,16 +2,11 @@ package com.retroapp.airhockey.airhockey
 
 import android.content.Context
 import android.opengl.GLSurfaceView
-import android.util.DisplayMetrics
-import android.util.Log
 import android.view.MotionEvent
-import com.retroapp.airhockey.airhockey.util.LoggerConfig
-import kotlin.math.atan2
-import kotlin.math.sqrt
 
 class AirHockeySurfaceView(context: Context) : GLSurfaceView(context) {
     private val renderer: AirHockeyRenderer
-    private val touchScaleFactor: Float = 180.0f / 320f
+//    private val touchScaleFactor: Float = 180.0f / 320f
     private var previousX: Float = 0.0f
     private var previousY: Float = 0.0f
     private var rotationAngleX: Float = 0.0f
@@ -24,7 +19,7 @@ class AirHockeySurfaceView(context: Context) : GLSurfaceView(context) {
         //setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         setRenderer(renderer)
 
-        renderMode = RENDERMODE_CONTINUOUSLY
+        renderMode = RENDERMODE_WHEN_DIRTY
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
