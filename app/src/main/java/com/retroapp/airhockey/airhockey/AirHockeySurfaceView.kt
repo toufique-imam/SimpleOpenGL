@@ -24,7 +24,7 @@ class AirHockeySurfaceView(context: Context) : GLSurfaceView(context) {
         //setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         setRenderer(renderer)
 
-        renderMode = RENDERMODE_WHEN_DIRTY
+        renderMode = RENDERMODE_CONTINUOUSLY
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -63,10 +63,6 @@ class AirHockeySurfaceView(context: Context) : GLSurfaceView(context) {
 
     // Method to apply rotation to your GL rendering
     private fun applyRotation(angleX: Float, angleY: Float) {
-        renderer.viewRotation[0] = angleX
-        renderer.viewRotation[1] = angleY
-        renderer.viewRotation[2] = 0f
-        renderer.viewRotation[3] = 0f
         requestRender()
     }
 }
