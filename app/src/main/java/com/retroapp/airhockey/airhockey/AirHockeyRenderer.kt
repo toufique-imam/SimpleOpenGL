@@ -42,6 +42,12 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
         texture = TextureHelper.loadTexture(context, R.drawable.air_hockey_surface)
 
     }
+    fun handleTouchPressed(x: Float, y: Float){
+        TODO()
+    }
+    fun handleTouchDrag(x: Float, y: Float){
+        TODO()
+    }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         // Set the OpenGL viewport to fill the entire surface.

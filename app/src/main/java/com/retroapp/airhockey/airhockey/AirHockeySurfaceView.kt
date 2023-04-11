@@ -27,24 +27,20 @@ class AirHockeySurfaceView(context: Context) : GLSurfaceView(context) {
         if (event == null) return false
         val x: Float = event.x
         val y: Float = event.y
+
+        val normalizedX = (event.x / width) * 2 - 1
+        val normalizedY = (event.y / height) * 2 - 1
+
         when (event.action) {
             MotionEvent.ACTION_MOVE -> {
-
-                var dx: Float = x - previousX
-                var dy: Float = y - previousY
-
-                // reverse direction of rotation above the mid-line
-                if (y > height / 2) {
-                    dx *= -1
+                this.queueEvent {
+                    renderer.handleTouchDrag(normalizedX, normalizedY)
                 }
-
-                // reverse direction of rotation to left of the mid-line
-                if (x < width / 2) {
-                    dy *= -1
+            }
+            MotionEvent.ACTION_DOWN -> {
+                this.queueEvent {
+                    renderer.handleTouchPressed(normalizedX, normalizedY)
                 }
-
-                //renderer.angle += (dx + dy) * TOUCH_SCALE_FACTOR
-               // requestRender()
             }
         }
 
