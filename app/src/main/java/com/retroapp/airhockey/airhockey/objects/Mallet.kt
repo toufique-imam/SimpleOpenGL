@@ -1,7 +1,7 @@
 package com.retroapp.airhockey.airhockey.objects
 
 import com.retroapp.airhockey.airhockey.programs.ColorShaderProgram
-import com.retroapp.airhockey.airhockey.util.geometry.Point
+import com.retroapp.airhockey.airhockey.util.Geometry.Companion.Point
 
 class Mallet(radius: Float, val height: Float, numOfPointsAroundMallet: Int) {
     private val generatedData =

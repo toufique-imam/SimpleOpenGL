@@ -43,6 +43,7 @@ class AirHockeySurfaceView(context: Context) : GLSurfaceView(context) {
                 }
             }
         }
+        requestRender()
 
         previousX = x
         previousY = y

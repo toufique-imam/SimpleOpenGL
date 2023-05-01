@@ -1,9 +1,9 @@
 package com.retroapp.airhockey.airhockey.objects
 
 import android.opengl.GLES20.*
-import com.retroapp.airhockey.airhockey.util.geometry.Circle
-import com.retroapp.airhockey.airhockey.util.geometry.Cylinder
-import com.retroapp.airhockey.airhockey.util.geometry.Point
+import com.retroapp.airhockey.airhockey.util.Geometry.Companion.Circle
+import com.retroapp.airhockey.airhockey.util.Geometry.Companion.Cylinder
+import com.retroapp.airhockey.airhockey.util.Geometry.Companion.Point
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
