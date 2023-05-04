@@ -53,26 +53,29 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
 
     }
 
-    fun handleTouchPressed(normalizedX: Float, normalizedY: Float) {
+    fun handleTouchPress(normalizedX: Float, normalizedY: Float) {
         val ray = convertNormalized2DPointToRay(normalizedX, normalizedY)
         val malletBoundingSphere = Sphere(
             Point(blueMalletPosition.x, blueMalletPosition.y, blueMalletPosition.z),
             mallet.height / 2f
         )
         malletPressed = intersects(malletBoundingSphere, ray)
-        LoggerConfig.e("check", "malledPressed $malletPressed $malletPressed")
+        LoggerConfig.e(
+            "check",
+            "malledPressed $malletPressed ${blueMalletPosition.x} ${blueMalletPosition.y} ${blueMalletPosition.z}"
+        )
     }
 
+
     fun handleTouchDrag(normalizedX: Float, normalizedY: Float) {
-        LoggerConfig.e("check2 ", "malledPressed $malletPressed")
-        if(malletPressed){
+        if (malletPressed) {
             val ray = convertNormalized2DPointToRay(normalizedX, normalizedY)
             // Define a plane representing our air hockey table.
-            val plane = Plane(Point(0f,0f,0f), Vector(0f, 1f, 0f))
+            val plane = Plane(Point(0f, 0f, 0f), Vector(0f, 1f, 0f))
             // Find out where the touched point intersects the plane
             // representing our table. We'll move the mallet along this plane.
-            val touchedPoint : Point = Geometry.intersectionPoint(ray, plane)
-            blueMalletPosition = Point(touchedPoint.x, mallet.height/2f, touchedPoint.z)
+            val touchedPoint: Point = Geometry.intersectionPoint(ray, plane)
+            blueMalletPosition = Point(touchedPoint.x, mallet.height / 2f, touchedPoint.z)
         }
     }
 
@@ -80,15 +83,23 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
         // Set the OpenGL viewport to fill the entire surface.
         glViewport(0, 0, width, height)
         MatrixHelper.perspectiveM(
-            projectionMatrix, 65f, (width.toFloat() / height.toFloat()), 1f, 10f
+            projectionMatrix,
+            45f,
+            (width.toFloat() / height.toFloat()),
+            1f,
+            10f
         )
         setLookAtM(viewMatrix, 0, 0f, 1.2f, 2.2f, 0f, 0f, 0f, 0f, 1f, 0f)
     }
 
     private fun divideW(vector: FloatArray) {
-        for (i in 0..2) {
-            vector[i] = vector[i] / vector[3]
-        }
+        vector[0] = vector[0] / vector[3]
+        vector[1] = vector[1] / vector[3]
+        vector[2] = vector[2] / vector[3]
+    }
+
+    fun reset() {
+        blueMalletPosition = Point(0f, mallet.height / 2f, 0.4f)
     }
 
     private fun convertNormalized2DPointToRay(normalizedX: Float, normalizedY: Float): Ray {
@@ -101,13 +112,15 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
 
         multiplyMV(nearPointWorld, 0, invertedViewProjectionMatrix, 0, nearPointNdc, 0)
         multiplyMV(farPointWorld, 0, invertedViewProjectionMatrix, 0, farPointNdc, 0)
+
         //perspective divide
         divideW(nearPointWorld)
         divideW(farPointWorld)
+
         val nearPointRay = Point(nearPointWorld[0], nearPointWorld[1], nearPointWorld[2])
         val farPointRay = Point(farPointWorld[0], farPointWorld[1], farPointWorld[2])
 
-        return Ray(nearPointRay, vector = vectorBetween(nearPointRay, farPointRay))
+        return Ray(nearPointRay, vectorBetween(nearPointRay, farPointRay))
     }
 
     override fun onDrawFrame(p0: GL10?) {

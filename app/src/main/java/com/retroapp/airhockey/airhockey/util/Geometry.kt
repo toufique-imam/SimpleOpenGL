@@ -5,16 +5,6 @@ import kotlin.math.sqrt
 
 class Geometry {
     companion object {
-        class Circle(val center: Point, val radius: Float) {
-            fun scale(scale: Float): Circle {
-                return Circle(center, radius * scale)
-            }
-        }
-
-        class Plane(val point: Point, val normal: Vector)
-
-        class Cylinder(val center: Point, val radius: Float, val height: Float)
-
         class Point(val x: Float, val y: Float, val z: Float) {
             fun translateY(distance: Float): Point {
                 return Point(x, y + distance, z)
@@ -24,13 +14,6 @@ class Geometry {
                 return Point(x + vector.x, y + vector.y, z + vector.z)
             }
         }
-
-        class Ray(
-            val point: Point,
-            val vector: Vector
-        )
-
-        class Sphere(val center: Point, val radius: Float)
 
         class Vector(val x: Float, val y: Float, val z: Float) {
             fun crossProduct(other: Vector): Vector {
@@ -54,11 +37,30 @@ class Geometry {
             }
         }
 
+        class Circle(val center: Point, val radius: Float) {
+            fun scale(scale: Float): Circle {
+                return Circle(center, radius * scale)
+            }
+        }
+
+        class Plane(val point: Point, val normal: Vector)
+
+        class Cylinder(val center: Point, val radius: Float, val height: Float)
+
+
+        class Ray(
+            val point: Point,
+            val vector: Vector
+        )
+
+        class Sphere(val center: Point, val radius: Float)
+
+
         fun vectorBetween(from: Point, to: Point): Vector {
             return Vector(to.x - from.x, to.y - from.y, to.z - from.z)
         }
 
-        fun distanceBetween(point: Point, ray: Ray): Float {
+        private fun distanceBetween(point: Point, ray: Ray): Float {
             val p1ToPoint = vectorBetween(ray.point, point)
             val p2ToPoint = vectorBetween(ray.point.translate(ray.vector), point)
 

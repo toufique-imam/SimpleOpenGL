@@ -2,15 +2,16 @@ package com.retroapp.airhockey.airhockey
 
 import android.content.Context
 import android.opengl.GLSurfaceView
+import android.util.AttributeSet
 import android.view.MotionEvent
 
-class AirHockeySurfaceView(context: Context) : GLSurfaceView(context) {
+class AirHockeySurfaceView : GLSurfaceView {
     private val renderer: AirHockeyRenderer
     private val touchScaleFactor: Float = 180.0f / 320f
     private var previousX: Float = 0f
     private var previousY: Float = 0f
 
-    init {
+    constructor(context: Context) : super(context) {
         setEGLContextClientVersion(2)
 
         renderer = AirHockeyRenderer(context)
@@ -18,6 +19,21 @@ class AirHockeySurfaceView(context: Context) : GLSurfaceView(context) {
         setRenderer(renderer)
 
         renderMode = RENDERMODE_WHEN_DIRTY
+    }
+
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+
+        setEGLContextClientVersion(2)
+
+        renderer = AirHockeyRenderer(context)
+        //setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+        setRenderer(renderer)
+
+        renderMode = RENDERMODE_WHEN_DIRTY
+    }
+
+    fun reset() {
+        renderer.reset()
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -29,7 +45,7 @@ class AirHockeySurfaceView(context: Context) : GLSurfaceView(context) {
         val y: Float = event.y
 
         val normalizedX = (event.x / width) * 2 - 1
-        val normalizedY = (event.y / height) * 2 - 1
+        val normalizedY = -((event.y / height) * 2 - 1)
 
         when (event.action) {
             MotionEvent.ACTION_MOVE -> {
@@ -39,7 +55,7 @@ class AirHockeySurfaceView(context: Context) : GLSurfaceView(context) {
             }
             MotionEvent.ACTION_DOWN -> {
                 this.queueEvent {
-                    renderer.handleTouchPressed(normalizedX, normalizedY)
+                    renderer.handleTouchPress(normalizedX, normalizedY)
                 }
             }
         }
