@@ -18,7 +18,7 @@ class AirHockeySurfaceView : GLSurfaceView {
         //setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         setRenderer(renderer)
 
-        renderMode = RENDERMODE_WHEN_DIRTY
+        renderMode = RENDERMODE_CONTINUOUSLY
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
@@ -29,7 +29,7 @@ class AirHockeySurfaceView : GLSurfaceView {
         //setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         setRenderer(renderer)
 
-        renderMode = RENDERMODE_WHEN_DIRTY
+        renderMode = RENDERMODE_CONTINUOUSLY
     }
 
     fun reset() {

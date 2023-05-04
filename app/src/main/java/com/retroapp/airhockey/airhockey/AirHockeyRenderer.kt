@@ -148,13 +148,22 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
     }
 
     override fun onDrawFrame(p0: GL10?) {
-        val puckPosition1 = puckPosition.translate(puckVector)
+        puckPosition = puckPosition.translate(puckVector)
+        puckVector = puckVector.scale(0.99f)
+        if (puckPosition.x < leftBound + puck.radius || puckPosition.x > rightBound - puck.radius) {
+            puckVector = Vector(-puckVector.x, puckVector.y, puckVector.z)
+            puckVector = puckVector.scale(0.9f)
+        }
+        if (puckPosition.z < farBound + puck.radius || puckPosition.z > nearBound - puck.radius) {
+            puckVector = Vector(puckVector.x, puckVector.y, -puckVector.z)
+            puckVector = puckVector.scale(0.9f)
+        }
         puckPosition = Point(
-            clamp(puckPosition1.x, leftBound + puck.radius, rightBound - puck.radius),
-            puckPosition1.y,
-            clamp(puckPosition1.z, farBound + puck.radius, nearBound - puck.radius)
+            clamp(puckPosition.x, leftBound + puck.radius, rightBound - puck.radius),
+            puckPosition.y,
+            clamp(puckPosition.z, farBound + puck.radius, nearBound - puck.radius)
         )
-        puckVector = Vector(0f, 0f, 0f)
+
         glClear(GL_COLOR_BUFFER_BIT)
         // Multiply the view and projection matrices together.
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
