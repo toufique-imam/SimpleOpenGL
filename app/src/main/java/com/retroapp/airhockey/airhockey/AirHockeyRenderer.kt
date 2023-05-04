@@ -23,6 +23,8 @@ import com.retroapp.airhockey.airhockey.util.MatrixHelper
 import com.retroapp.airhockey.airhockey.util.TextureHelper
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
+import kotlin.math.max
+import kotlin.math.min
 
 
 class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
@@ -42,7 +44,15 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
 
     private var malletPressed = false
     private var blueMalletPosition = Point(0f, mallet.height / 2f, 0.4f)
+    private var prevBlueMalletPosition = Point(0f, mallet.height / 2f, 0.4f)
+    private var puckPosition = Point(0f, puck.height / 2f, 0f)
+    private var puckVector = Vector(0f, 0f, 0f)
     private val invertedViewProjectionMatrix = FloatArray(16)
+
+    private val leftBound = -0.5f
+    private val rightBound = 0.5f
+    private val farBound = -0.8f
+    private val nearBound = 0.8f
 
     override fun onSurfaceCreated(p0: GL10?, p1: EGLConfig?) {
         glClearColor(0f, 0f, 0f, 0f)
@@ -75,8 +85,20 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
             // Find out where the touched point intersects the plane
             // representing our table. We'll move the mallet along this plane.
             val touchedPoint: Point = Geometry.intersectionPoint(ray, plane)
-            blueMalletPosition = Point(touchedPoint.x, mallet.height / 2f, touchedPoint.z)
+            blueMalletPosition = Point(
+                clamp(touchedPoint.x, leftBound + mallet.radius, rightBound - mallet.radius),
+                mallet.height / 2f,
+                clamp(touchedPoint.z, 0f + mallet.radius, nearBound - mallet.radius)
+            )
+            val distance = vectorBetween(blueMalletPosition, puckPosition).length()
+            if (distance < (puck.radius + mallet.radius)) {
+                puckVector = vectorBetween(prevBlueMalletPosition, blueMalletPosition)
+            }
         }
+    }
+
+    private fun clamp(value: Float, min: Float, max: Float): Float {
+        return min(max, max(value, min))
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -99,6 +121,8 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
     }
 
     fun reset() {
+        puckPosition = Point(0f, puck.radius / 2, 0f)
+        puckVector = Vector(0f, 0f, 0f)
         blueMalletPosition = Point(0f, mallet.height / 2f, 0.4f)
     }
 
@@ -124,6 +148,13 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
     }
 
     override fun onDrawFrame(p0: GL10?) {
+        val puckPosition1 = puckPosition.translate(puckVector)
+        puckPosition = Point(
+            clamp(puckPosition1.x, leftBound + puck.radius, rightBound - puck.radius),
+            puckPosition1.y,
+            clamp(puckPosition1.z, farBound + puck.radius, nearBound - puck.radius)
+        )
+        puckVector = Vector(0f, 0f, 0f)
         glClear(GL_COLOR_BUFFER_BIT)
         // Multiply the view and projection matrices together.
         multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
@@ -150,7 +181,7 @@ class AirHockeyRenderer(private val context: Context) : GLSurfaceView.Renderer {
         mallet.draw()
 
         //draw the puck
-        positionObjectInScene(0f, puck.height / 2f, 0f)
+        positionObjectInScene(puckPosition.x, puckPosition.y, puckPosition.z)
         colorShaderProgram.setUniforms(modelViewProjectionMatrix, 0.8f, 0.8f, 1f)
         puck.bindData(colorShaderProgram)
         puck.draw()

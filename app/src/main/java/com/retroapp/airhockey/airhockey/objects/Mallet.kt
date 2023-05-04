@@ -3,7 +3,7 @@ package com.retroapp.airhockey.airhockey.objects
 import com.retroapp.airhockey.airhockey.programs.ColorShaderProgram
 import com.retroapp.airhockey.airhockey.util.Geometry.Companion.Point
 
-class Mallet(radius: Float, val height: Float, numOfPointsAroundMallet: Int) {
+class Mallet(val radius: Float, val height: Float, numOfPointsAroundMallet: Int) {
     private val generatedData =
         ObjectBuilder.createMallet(Point(0f, 0f, 0f), radius, height, numOfPointsAroundMallet)
     private val vertexArray = VertexArray(generatedData.vertexData)

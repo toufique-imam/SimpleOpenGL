@@ -33,7 +33,10 @@ class AirHockeySurfaceView : GLSurfaceView {
     }
 
     fun reset() {
-        renderer.reset()
+        this.queueEvent {
+            renderer.reset()
+            requestRender()
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
