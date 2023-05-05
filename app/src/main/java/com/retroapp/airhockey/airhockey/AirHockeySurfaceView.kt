@@ -2,62 +2,70 @@ package com.retroapp.airhockey.airhockey
 
 import android.content.Context
 import android.opengl.GLSurfaceView
+import android.util.AttributeSet
 import android.view.MotionEvent
 
-class AirHockeySurfaceView(context: Context) : GLSurfaceView(context) {
+class AirHockeySurfaceView : GLSurfaceView {
     private val renderer: AirHockeyRenderer
 //    private val touchScaleFactor: Float = 180.0f / 320f
     private var previousX: Float = 0.0f
     private var previousY: Float = 0.0f
-    private var rotationAngleX: Float = 0.0f
-    private var rotationAngleY: Float = 0.0f
 
-    init {
+    constructor(context: Context) : super(context) {
         setEGLContextClientVersion(2)
 
         renderer = AirHockeyRenderer(context)
         //setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         setRenderer(renderer)
 
-        renderMode = RENDERMODE_WHEN_DIRTY
+        renderMode = RENDERMODE_CONTINUOUSLY
     }
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        val currentX = event.x
-        val currentY = event.y
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+
+        setEGLContextClientVersion(2)
+
+        renderer = AirHockeyRenderer(context)
+        //setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+        setRenderer(renderer)
+
+        renderMode = RENDERMODE_CONTINUOUSLY
+    }
+
+    fun reset() {
+        this.queueEvent {
+            renderer.reset()
+            requestRender()
+        }
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        // MotionEvent reports input details from the touch screen
+        // and other input controls. In this case, you are only
+        // interested in events where the touch position changed.
+        if (event == null) return false
+        val x: Float = event.x
+        val y: Float = event.y
+
+        val normalizedX = (event.x / width) * 2 - 1
+        val normalizedY = -((event.y / height) * 2 - 1)
+
         when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                // Record the initial touch coordinates
-                previousX = currentX
-                previousY = currentY
-            }
-            MotionEvent.ACTION_UP -> {
-                // Reset the rotation angle
-                rotationAngleX = 0.0f
-                rotationAngleY = 0.0f
-            }
             MotionEvent.ACTION_MOVE -> {
-                // Calculate the change in touch coordinates
-                val deltaX = currentX - previousX
-                val deltaY = currentY - previousY
-
-                // Update the rotation angles based on touch input
-                rotationAngleX += deltaY // Adjust the sensitivity to your preference
-                rotationAngleY += deltaX // Adjust the sensitivity to your preference
-
-                // Call a method to apply the rotation to your GL rendering
-                applyRotation(rotationAngleX, rotationAngleY)
-
-                // Update the previous touch coordinates for the next frame
-                previousX = currentX
-                previousY = currentY
+                this.queueEvent {
+                    renderer.handleTouchDrag(normalizedX, normalizedY)
+                }
+            }
+            MotionEvent.ACTION_DOWN -> {
+                this.queueEvent {
+                    renderer.handleTouchPress(normalizedX, normalizedY)
+                }
             }
         }
-        return true
-    }
-
-    // Method to apply rotation to your GL rendering
-    private fun applyRotation(angleX: Float, angleY: Float) {
         requestRender()
+
+        previousX = x
+        previousY = y
+        return true
     }
 }
