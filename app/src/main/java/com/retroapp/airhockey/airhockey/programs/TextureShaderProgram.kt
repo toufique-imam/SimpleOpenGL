@@ -41,8 +41,9 @@ class TextureShaderProgram(context: Context) :
         // telling it to read from texture unit 1.
         glUniform1i(uTextureUnitLocation2, 1)
     }
-    fun setColor(r: Float, g: Float, b: Float, a: Float){
-        glUniform4f(uShaderColorLocation, r, g, b,a)
+
+    fun setColor(r: Float, g: Float, b: Float, a: Float) {
+        glUniform4f(uShaderColorLocation, r, g, b, a)
     }
 //    fun setUniforms
 

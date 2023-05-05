@@ -2,8 +2,6 @@ package com.retroapp.airhockey.airhockey
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.retroapp.airhockey.R

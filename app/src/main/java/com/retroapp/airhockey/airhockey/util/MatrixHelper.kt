@@ -26,7 +26,7 @@ class MatrixHelper {
 
             m[12] = 0f
             m[13] = 0f
-            m[14] = -((2f*f*n)/(f-n))
+            m[14] = -((2f * f * n) / (f - n))
             m[15] = 0f
         }
     }

@@ -22,7 +22,7 @@ class Triangle {
 //                "}"
 
     private val fragmentShaderCode =
-                "precision mediump float;" +
+        "precision mediump float;" +
                 "uniform vec4 vColor;" +
                 "void main() {" +
                 "  gl_FragColor = vColor;" +
@@ -30,7 +30,7 @@ class Triangle {
     private val vertexShaderCode =
     // This matrix member variable provides a hook to manipulate
         // the coordinates of the objects that use this vertex shader
-                "uniform mat4 uMVPMatrix;" +
+        "uniform mat4 uMVPMatrix;" +
                 "attribute vec4 vPosition;" +
                 "void main() {" +
                 // the matrix must be included as a modifier of gl_Position
@@ -120,6 +120,7 @@ class Triangle {
             GLES20.glDisableVertexAttribArray(it)
         }
     }
+
     fun draw() {
         GLES20.glUseProgram(mProgram)
         positionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition").also {

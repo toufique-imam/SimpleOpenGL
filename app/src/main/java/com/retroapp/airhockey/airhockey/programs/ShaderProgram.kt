@@ -5,14 +5,24 @@ import android.opengl.GLES20
 import com.retroapp.airhockey.airhockey.util.ShaderHelper
 import com.retroapp.airhockey.airhockey.util.TextResourceReader
 
-open class ShaderProgram(context: Context, vertexShaderResourceId: Int, fragmentShaderResourceId: Int) {
+open class ShaderProgram(
+    context: Context,
+    vertexShaderResourceId: Int,
+    fragmentShaderResourceId: Int
+) {
     // Compile the shaders and link the program.
-    protected val program: Int = ShaderHelper.buildProgram(TextResourceReader.readTextFileFromResource(context, vertexShaderResourceId), TextResourceReader.readTextFileFromResource(context, fragmentShaderResourceId))
+    protected val program: Int = ShaderHelper.buildProgram(
+        TextResourceReader.readTextFileFromResource(
+            context,
+            vertexShaderResourceId
+        ), TextResourceReader.readTextFileFromResource(context, fragmentShaderResourceId)
+    )
 
-    fun useProgram(){
+    fun useProgram() {
         // Set the current OpenGL shader program to this program.
         GLES20.glUseProgram(program)
     }
+
     companion object {
         // Uniform constants
         const val uMatrix = "u_Matrix"

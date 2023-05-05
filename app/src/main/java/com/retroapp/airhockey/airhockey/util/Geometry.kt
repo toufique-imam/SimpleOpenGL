@@ -79,5 +79,18 @@ class Geometry {
         fun intersects(sphere: Sphere, ray: Ray): Boolean {
             return distanceBetween(sphere.center, ray) < sphere.radius
         }
+
+        fun findPointInLine(A: Point, B: Point, distance: Float): Point {
+            val vectorAB = vectorBetween(A, B)
+            val lenLineAB = vectorAB.length()
+            val scale = distance / lenLineAB
+            val vectorAP = vectorAB.scale(scale)
+            val pointP = Point(
+                A.x + vectorAP.x,
+                A.y + vectorAP.y,
+                A.z + vectorAP.z
+            )
+            return pointP
+        }
     }
 }

@@ -10,6 +10,7 @@ class ShaderHelper {
     companion object {
         private const val TAG = "ShaderHelper"
         const val bytesPerFloat = 4
+
         /**
          * Compiles the Vertex shader code and returns the ShaderObjectId
          *
@@ -20,6 +21,7 @@ class ShaderHelper {
         fun compileVertexShader(shaderCode: String): Int {
             return compileShader(GL_VERTEX_SHADER, shaderCode)
         }
+
         /**
          * Compiles the Fragment shader code and returns the ShaderObjectId
          *
@@ -30,6 +32,7 @@ class ShaderHelper {
         fun compileFragmentShader(shaderCode: String): Int {
             return compileShader(GL_FRAGMENT_SHADER, shaderCode)
         }
+
         private fun compileShader(type: Int, shaderCode: String): Int {
             val shaderObjectId = glCreateShader(type)
             if (shaderObjectId == 0) {
@@ -42,7 +45,8 @@ class ShaderHelper {
             val compileStatus = intArrayOf(1)
             glGetShaderiv(shaderObjectId, GL_COMPILE_STATUS, compileStatus, 0)
             LoggerConfig.v(
-                TAG, "Results of compiling source:\n $shaderCode >>" + glGetShaderInfoLog(shaderObjectId)
+                TAG,
+                "Results of compiling source:\n $shaderCode >>" + glGetShaderInfoLog(shaderObjectId)
             )
             if (compileStatus[0] == 0) {
                 glDeleteShader(shaderObjectId)
@@ -51,6 +55,7 @@ class ShaderHelper {
             }
             return shaderObjectId
         }
+
         /**
          * Links the Vertex Shader and Fragment Shader
          *
@@ -101,6 +106,7 @@ class ShaderHelper {
 
             return validateStatus[0] != 0
         }
+
         /**
          * converts the array to FloatBuffer
          *
@@ -132,6 +138,7 @@ class ShaderHelper {
                 }
             return buffer
         }
+
         /**
          * converts the array of any type to FloatArray
          *
@@ -142,6 +149,7 @@ class ShaderHelper {
             val floatArray = array.filterIsInstance<Number>().map { it.toFloat() }.toFloatArray()
             return toFloatBuffer(floatArray)
         }
+
         /**
          * converts the array of any type to IntBuffer
          *
@@ -152,12 +160,13 @@ class ShaderHelper {
             val intArray = array.filterIsInstance<Number>().map { it.toInt() }.toIntArray()
             return toIntBuffer(intArray)
         }
+
         fun buildProgram(vertexShaderSource: String, fragmentShaderCourse: String): Int {
 
             val vertexShader = compileVertexShader(vertexShaderSource)
             val fragmentShader = compileFragmentShader(fragmentShaderCourse)
 
-            val program: Int = linkProgram(vertexShader,fragmentShader)
+            val program: Int = linkProgram(vertexShader, fragmentShader)
 
             validateProgram(program)
 

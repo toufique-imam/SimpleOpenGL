@@ -7,7 +7,8 @@ import android.view.MotionEvent
 
 class AirHockeySurfaceView : GLSurfaceView {
     private val renderer: AirHockeyRenderer
-//    private val touchScaleFactor: Float = 180.0f / 320f
+
+    //    private val touchScaleFactor: Float = 180.0f / 320f
     private var previousX: Float = 0.0f
     private var previousY: Float = 0.0f
 

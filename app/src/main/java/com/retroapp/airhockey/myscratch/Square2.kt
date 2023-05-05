@@ -6,10 +6,10 @@ import java.nio.FloatBuffer
 import java.nio.ShortBuffer
 
 var squareCoords = floatArrayOf(
-    -0.5f,  0.5f, 0.0f,      // top left
+    -0.5f, 0.5f, 0.0f,      // top left
     -0.5f, -0.5f, 0.0f,      // bottom left
     0.5f, -0.5f, 0.0f,      // bottom right
-    0.5f,  0.5f, 0.0f       // top right
+    0.5f, 0.5f, 0.0f       // top right
 )
 
 class Square2 {

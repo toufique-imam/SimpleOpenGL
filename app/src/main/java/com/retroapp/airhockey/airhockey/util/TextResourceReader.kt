@@ -9,6 +9,7 @@ import java.io.InputStreamReader
 class TextResourceReader {
     companion object {
         const val TAG = "TextResourceReader"
+
         /**
          * Returns the text from given resource, used to get the string for shader code.
          *
@@ -18,24 +19,24 @@ class TextResourceReader {
          * @throws Resources.NotFoundException
          * @throws IOException
          */
-        fun readTextFileFromResource(context: Context, resourceId: Int): String{
+        fun readTextFileFromResource(context: Context, resourceId: Int): String {
             val body = StringBuilder()
 
-            try{
+            try {
                 val inputStream = context.resources.openRawResource(resourceId)
                 val inputStreamReader = InputStreamReader(inputStream)
                 val bufferedReader = BufferedReader(inputStreamReader)
 
                 var nextLine: String? = null
-                while (true){
+                while (true) {
                     nextLine = bufferedReader.readLine()
-                    if(nextLine==null)break
+                    if (nextLine == null) break
                     body.append(nextLine)
                     body.append("\n")
                 }
-            }catch (e: IOException){
+            } catch (e: IOException) {
                 throw e
-            }catch (nfe: Resources.NotFoundException){
+            } catch (nfe: Resources.NotFoundException) {
                 throw nfe
             }
             return body.toString()
